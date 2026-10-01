@@ -24,8 +24,8 @@ export class LocalStorageAdapter implements StorageAdapter {
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
+      // Keep working in memory if storage is full or blocked.
       console.error(`Failed to write "${key}" to localStorage`, error);
-      throw error;
     }
   }
 

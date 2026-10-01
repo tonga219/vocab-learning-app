@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppDataProvider, useAppData } from './hooks/useAppData';
 import { ToastProvider } from './hooks/useToast';
 import { Layout } from './components/Layout';
@@ -37,15 +37,18 @@ function AppRoutes() {
   );
 }
 
+// Embedded/hosted previews (e.g. a sandboxed iframe) can't use the History API reliably.
+const Router = import.meta.env.VITE_ROUTER === 'memory' ? MemoryRouter : BrowserRouter;
+
 export default function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <AppDataProvider>
         <ToastProvider>
           <ScrollToTop />
           <AppRoutes />
         </ToastProvider>
       </AppDataProvider>
-    </BrowserRouter>
+    </Router>
   );
 }
