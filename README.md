@@ -4,6 +4,12 @@ Cadence picks the vocabulary you should review each day. The **Today** screen us
 
 Built with React, TypeScript, Vite, Tailwind CSS and Lucide icons. It has no backend: data is saved in the browser's `localStorage`.
 
+## Live app
+
+https://tonga219.github.io/vocab-learning-app/
+
+Every push to the default branch is tested, built and deployed to GitHub Pages by `.github/workflows/deploy.yml`.
+
 ## Install & run
 
 ```bash

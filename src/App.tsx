@@ -42,7 +42,7 @@ const Router = import.meta.env.VITE_ROUTER === 'memory' ? MemoryRouter : Browser
 
 export default function App() {
   return (
-    <Router>
+    <Router basename={import.meta.env.BASE_URL.replace(/\/$/, '') || undefined}>
       <AppDataProvider>
         <ToastProvider>
           <ScrollToTop />
