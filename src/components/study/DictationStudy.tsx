@@ -57,7 +57,7 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
             <div className="mt-4 h-px bg-gradient-to-r from-blue-200 via-blue-100 to-transparent" aria-hidden />
           </div>
           <div className="flex flex-1 items-center justify-center px-6 py-8 sm:px-12">
-            <p lang="vi" className={cn('text-center font-semibold tracking-[-0.02em] text-ink [text-wrap:balance]', promptSize(word.definition))}>
+            <p lang="vi" className={cn('whitespace-pre-line text-center font-semibold tracking-[-0.02em] text-ink [text-wrap:balance]', promptSize(word.definition))}>
               {word.definition}
             </p>
           </div>
@@ -147,7 +147,7 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
                   </div>
                   <div className="bg-blue-50/40 px-5 py-4">
                     <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-blue-700">Correct answer</div>
-                    <div lang="en" className="mt-1 break-words text-lg font-semibold text-ink">
+                    <div lang="en" className="mt-1 whitespace-pre-line break-words text-lg font-semibold text-ink">
                       {result.answer
                         ? diffChars(word.term, result.answer).map((c, i) => (
                             <span key={i} className={cn(!c.ok && 'rounded-[3px] bg-blue-100 text-blue-800')}>

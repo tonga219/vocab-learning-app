@@ -10,6 +10,7 @@ import { Button } from '../components/Button';
 import { NotFound } from './NotFound';
 import { createId } from '../utils/id';
 import { cn } from '../utils/cn';
+import { AutoTextarea } from '../components/AutoTextarea';
 
 interface Row {
   key: string;
@@ -31,7 +32,7 @@ function parseLines(text: string): { term: string; definition: string }[] | null
 }
 
 const fieldClass =
-  'h-11 w-full rounded-xl border border-line bg-white px-3.5 text-[15px] text-ink outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100';
+  'block min-h-11 w-full resize-none overflow-hidden py-[11px] leading-[21px] rounded-xl border border-line bg-white px-3.5 text-[15px] text-ink outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100';
 
 export function AddVocabularyPage() {
   const { folderId = '', setId = '' } = useParams();
@@ -41,7 +42,7 @@ export function AddVocabularyPage() {
   const navigate = useNavigate();
   const [rows, setRows] = useState<Row[]>(() => [newRow(), newRow(), newRow()]);
   const focusKey = useRef<string | null>(null);
-  const inputs = useRef(new Map<string, HTMLInputElement>());
+  const inputs = useRef(new Map<string, HTMLTextAreaElement>());
 
   useEffect(() => {
     if (focusKey.current) {
@@ -72,7 +73,7 @@ export function AddVocabularyPage() {
 
   const removeRow = (key: string) => setRows((rs) => (rs.length === 1 ? [newRow()] : rs.filter((r) => r.key !== key)));
 
-  const onPaste = (e: ClipboardEvent<HTMLInputElement>, key: string) => {
+  const onPaste = (e: ClipboardEvent<HTMLTextAreaElement>, key: string) => {
     const parsed = parseLines(e.clipboardData.getData('text'));
     if (!parsed) return;
     e.preventDefault();
@@ -86,14 +87,12 @@ export function AddVocabularyPage() {
     toast(`Pasted ${parsed.length} rows`);
   };
 
-  const onDefinitionKey = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
-    if (e.key !== 'Enter') return;
+  // Tab from the last definition starts a new row; other Tabs follow the natural
+  // term → definition → next term order (remove buttons are skipped).
+  const onDefinitionKey = (e: KeyboardEvent<HTMLTextAreaElement>, index: number) => {
+    if (e.key !== 'Tab' || e.shiftKey || index !== rows.length - 1) return;
     e.preventDefault();
-    if (index === rows.length - 1) addRow();
-    else {
-      focusKey.current = `${rows[index + 1].key}:term`;
-      setRows((rs) => [...rs]);
-    }
+    addRow();
   };
 
   const save = () => {
@@ -110,8 +109,9 @@ export function AddVocabularyPage() {
       <div className="mb-4 flex items-start gap-2.5 rounded-xl bg-blue-50/70 px-4 py-3 text-[13px] leading-relaxed text-blue-900/80">
         <Info size={16} className="mt-0.5 shrink-0 text-blue-600" aria-hidden />
         <p>
-          New words start as <strong className="font-semibold text-blue-900">Hard</strong> — you can change that later. Tip: paste
-          lines like <span className="whitespace-nowrap font-mono text-[12px]">abundant | dồi dào</span> to fill many rows at once.
+          New words start as <strong className="font-semibold text-blue-900">Hard</strong>. <kbd className="font-sans font-semibold">Tab</kbd> moves to
+          the next field, <kbd className="font-sans font-semibold">Enter</kbd> adds a new line. Paste lines like{' '}
+          <span className="whitespace-nowrap font-mono text-[12px]">abundant | dồi dào</span> to fill many rows at once.
         </p>
       </div>
 
@@ -126,16 +126,16 @@ export function AddVocabularyPage() {
           {rows.map((row, index) => (
             <li
               key={row.key}
-              className="grid animate-fade-in grid-cols-[1fr_40px] gap-x-2 gap-y-2 border-b border-line/70 px-4 py-3 last:border-b-0 sm:grid-cols-[32px_1fr_1fr_40px] sm:items-center sm:gap-3"
+              className="grid animate-fade-in grid-cols-[1fr_40px] gap-x-2 gap-y-2 border-b border-line/70 px-4 py-3 last:border-b-0 sm:grid-cols-[32px_1fr_1fr_40px] sm:items-start sm:gap-3"
             >
-              <span className="tabular hidden text-right text-xs font-medium text-slate-400 sm:block" aria-hidden>
+              <span className="tabular hidden pt-[14px] text-right text-xs font-medium text-slate-400 sm:block" aria-hidden>
                 {index + 1}
               </span>
               <div className="col-start-1 row-start-1 sm:col-start-auto sm:row-start-auto">
                 <label className="sr-only" htmlFor={`${row.key}-term`}>
                   Term {index + 1}
                 </label>
-                <input
+                <AutoTextarea
                   id={`${row.key}-term`}
                   ref={(el) => {
                     if (el) inputs.current.set(`${row.key}:term`, el);
@@ -156,7 +156,7 @@ export function AddVocabularyPage() {
                 <label className="sr-only" htmlFor={`${row.key}-def`}>
                   Definition {index + 1}
                 </label>
-                <input
+                <AutoTextarea
                   id={`${row.key}-def`}
                   lang="vi"
                   value={row.definition}
@@ -171,7 +171,8 @@ export function AddVocabularyPage() {
                 type="button"
                 onClick={() => removeRow(row.key)}
                 aria-label={`Remove row ${index + 1}`}
-                className="col-start-2 row-span-2 row-start-1 inline-flex h-10 w-10 items-center justify-center self-center rounded-xl text-slate-400 transition-all hover:bg-slate-100 hover:text-ink active:scale-95 sm:col-start-auto sm:row-span-1 sm:row-start-auto"
+                tabIndex={-1}
+                className="col-start-2 row-span-2 row-start-1 inline-flex h-10 w-10 items-center justify-center self-center rounded-xl text-slate-400 transition-all hover:bg-slate-100 hover:text-ink active:scale-95 sm:col-start-auto sm:row-span-1 sm:row-start-auto sm:self-start sm:mt-0.5"
               >
                 <X size={17} />
               </button>

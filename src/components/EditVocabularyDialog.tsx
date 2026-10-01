@@ -6,6 +6,7 @@ import { Modal } from './Modal';
 import { Button } from './Button';
 import { ConfirmDialog } from './ConfirmDialog';
 import { formatRelativeDue } from '../utils/date';
+import { AutoTextarea } from './AutoTextarea';
 
 interface Props {
   vocab: Vocabulary | null;
@@ -15,7 +16,7 @@ interface Props {
 }
 
 export const inputClass =
-  'h-11 w-full rounded-xl border border-line bg-white px-3.5 text-[15px] text-ink outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100';
+  'block min-h-11 w-full resize-none overflow-hidden py-[11px] leading-[21px] rounded-xl border border-line bg-white px-3.5 text-[15px] text-ink outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100';
 
 export function EditVocabularyDialog({ vocab, onClose, onSave, onDelete }: Props) {
   const [term, setTerm] = useState('');
@@ -82,13 +83,13 @@ export function EditVocabularyDialog({ vocab, onClose, onSave, onDelete }: Props
             <label htmlFor={termId} className="mb-1.5 block text-[13px] font-medium text-slate-600">
               Term
             </label>
-            <input id={termId} lang="en" value={term} onChange={(e) => setTerm(e.target.value)} className={inputClass} autoComplete="off" />
+            <AutoTextarea id={termId} lang="en" value={term} onChange={(e) => setTerm(e.target.value)} className={inputClass} autoComplete="off" />
           </div>
           <div>
             <label htmlFor={defId} className="mb-1.5 block text-[13px] font-medium text-slate-600">
               Definition
             </label>
-            <input id={defId} lang="vi" value={definition} onChange={(e) => setDefinition(e.target.value)} className={inputClass} autoComplete="off" />
+            <AutoTextarea id={defId} lang="vi" value={definition} onChange={(e) => setDefinition(e.target.value)} className={inputClass} autoComplete="off" />
           </div>
           <button type="submit" className="hidden" aria-hidden tabIndex={-1} />
         </form>

@@ -65,7 +65,7 @@ function CardFace({ face, side, hint }: { face: Face; side: 'front' | 'back'; hi
         <p
           lang={face.lang}
           className={cn(
-            'max-w-full break-words text-center font-semibold tracking-[-0.02em] text-ink [text-wrap:balance]',
+            'max-w-full whitespace-pre-line break-words text-center font-semibold tracking-[-0.02em] text-ink [text-wrap:balance]',
             textSize(face.text),
           )}
         >
