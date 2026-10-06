@@ -62,9 +62,9 @@ src/
 
 ### Scheduling rules
 
-- **Hard:** 1 → 3 → 7 → 30 → 60 → 60… days
-- **Medium:** 3 → 30 → 60… days
-- **Easy:** 7 → 60… days
+- **Hard:** 1 → 3 → 7 → 30 → 60 → 120 → 240 → 365 → 365… days
+- **Medium:** 3 → 30 → 60 → 120 → 240 → 365… days
+- **Easy:** 7 → 60 → 120 → 240 → 365… days
 
 Rules for when a word is reviewed:
 
@@ -72,16 +72,19 @@ Rules for when a word is reviewed:
 - **Changing difficulty:** this resets the word to stage 1 of the new schedule and calculates the next review date from today. It does not count as a review.
 - **Completing a review:** a word counts as reviewed when you move from it to the next word (Next or Finish). Only then does the app write a `ReviewHistory` entry, update `lastReviewedAt`, advance the stage and set the next review date.
   - If you changed the difficulty while the card was on screen, the review keeps stage 1 of the new difficulty.
+  - A wrong Dictation answer means the word was forgotten: it restarts at stage 1 of its current difficulty.
   - In manual Study Set practice, a word that is not due yet is logged but keeps its schedule.
 - **Today's selection:**
   1. Sort the due pool (`nextReviewAt ≤ today`) by overdue days (descending), then difficulty (Hard > Medium > Easy), then stage (ascending), then last reviewed (oldest first).
   2. Take the top `dailyReviewLimit` words. Empty slots are never filled with words that aren't due, and words left out keep their dates.
   3. Words already reviewed in today's Daily Review count toward the limit.
+  4. Once today's review is done, **Review 10 more** starts an optional session with the next 10 waiting words.
 
 ### Dictation answer checking (`src/utils/answer.ts`)
 
 An answer is correct only on an exact match after these rules:
 
+- Enter checks the answer; Shift+Enter adds a new line.
 - Only the first line of the term is checked; later lines are notes.
 - Anything in parentheses is ignored: `deteriorate (v)` → `deteriorate`.
 - Letter case, periods, and hyphen vs space are ignored: `cutting-edge` = `cutting edge`.

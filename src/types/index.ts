@@ -3,6 +3,8 @@ export type ReviewMode = 'flashcard' | 'dictation';
 export type FlashcardFront = 'english' | 'vietnamese';
 /** Where a review happened: the Today (daily) review or manual study of a Study Set. */
 export type SessionType = 'daily' | 'manual';
+/** Order of Study Sets inside a folder, by the Study Set's creation date. */
+export type StudySetSort = 'newest' | 'oldest';
 
 /** ISO-8601 timestamp string. */
 export type ISODateString = string;
@@ -54,6 +56,7 @@ export interface Settings {
   dailyReviewLimit: number | null;
   preferredReviewMode: ReviewMode;
   flashcardFront: FlashcardFront;
+  studySetSort: StudySetSort;
 }
 
 export interface AppData {
@@ -68,6 +71,7 @@ export const DEFAULT_SETTINGS: Settings = {
   dailyReviewLimit: 30,
   preferredReviewMode: 'flashcard',
   flashcardFront: 'english',
+  studySetSort: 'newest',
 };
 
 export const DIFFICULTIES: Difficulty[] = ['hard', 'medium', 'easy'];

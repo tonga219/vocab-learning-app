@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, BookOpenText, CalendarClock, Check, ChevronDown, Coffee, FolderPlus } from 'lucide-react';
+import { ArrowRight, BookOpenText, CalendarClock, Check, ChevronDown, Coffee, FolderPlus, Plus } from 'lucide-react';
 import { useAppData } from '../hooks/useAppData';
 import { useLibrary } from '../hooks/useLibrary';
 import { useToday } from '../hooks/useToday';
-import { countByDifficulty, getTodayPlan } from '../utils/dailyPriority';
+import { countByDifficulty, EXTRA_REVIEW_SIZE, getTodayPlan } from '../utils/dailyPriority';
 import { diffInCalendarDays, formatLongDate } from '../utils/date';
 import { PageContainer } from '../components/Layout';
 import { Button, buttonClass } from '../components/Button';
@@ -141,6 +141,18 @@ export function TodayPage() {
             {plan.waiting.length > 0 &&
               ` ${plan.waiting.length} more ${plan.waiting.length === 1 ? 'word is' : 'words are'} waiting and will be prioritized tomorrow.`}
           </p>
+          {plan.waiting.length > 0 && (
+            <div className="relative mx-auto mt-7 flex max-w-sm flex-col items-stretch gap-2.5 sm:max-w-none sm:flex-row sm:justify-center">
+              <StudyModeSelector value={mode} onChange={(m) => updateSettings({ preferredReviewMode: m })} size="sm" />
+              <Button
+                variant="secondary"
+                icon={<Plus size={16} aria-hidden />}
+                onClick={() => navigate(`/review/${mode}?extra=1`)}
+              >
+                Review {Math.min(EXTRA_REVIEW_SIZE, plan.waiting.length)} more
+              </Button>
+            </div>
+          )}
           {upcomingText && (
             <p className="relative mt-6 inline-flex items-center gap-2 rounded-full bg-slate-100 px-3.5 py-1.5 text-[13px] font-medium text-slate-600">
               <CalendarClock size={14} aria-hidden />

@@ -21,9 +21,11 @@ interface Props {
   exitLabel: string;
   completeTitle: string;
   emptyTitle: string;
+  /** Optional follow-up offered on the completion screen. */
+  moreAction?: { to: string; label: string };
 }
 
-export function StudyScreen({ wordIds, mode, sessionType, title, exitTo, exitLabel, completeTitle, emptyTitle }: Props) {
+export function StudyScreen({ wordIds, mode, sessionType, title, exitTo, exitLabel, completeTitle, emptyTitle, moreAction }: Props) {
   const { data, setDifficulty, updateSettings } = useAppData();
   const { sourceLabel } = useLibrary();
   const session = useStudySession(wordIds, mode, sessionType);
@@ -46,6 +48,7 @@ export function StudyScreen({ wordIds, mode, sessionType, title, exitTo, exitLab
           correct={correct}
           backTo={exitTo}
           backLabel={exitLabel}
+          secondary={moreAction}
         />
       </SessionShell>
     );

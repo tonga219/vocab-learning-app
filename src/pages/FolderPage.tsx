@@ -11,13 +11,14 @@ import { EmptyState } from '../components/EmptyState';
 import { NameDialog } from '../components/NameDialog';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { RowMenu } from '../components/RowMenu';
+import { SegmentedControl } from '../components/SegmentedControl';
 import { NotFound } from './NotFound';
 import { formatShortDate } from '../utils/date';
 import type { StudySet } from '../types';
 
 export function FolderPage() {
   const { folderId = '' } = useParams();
-  const { createStudySet, renameStudySet, deleteStudySet } = useAppData();
+  const { data, createStudySet, renameStudySet, deleteStudySet, updateSettings } = useAppData();
   const { folderById, setsOf, vocabOf } = useLibrary();
   const toast = useToast();
   const [creating, setCreating] = useState(false);
@@ -26,7 +27,10 @@ export function FolderPage() {
 
   const folder = folderById.get(folderId);
   if (!folder) return <NotFound what="folder" />;
-  const sets = setsOf(folder.id);
+  const sort = data.settings.studySetSort;
+  const sets = [...setsOf(folder.id)].sort((a, b) =>
+    sort === 'newest' ? b.createdAt.localeCompare(a.createdAt) : a.createdAt.localeCompare(b.createdAt),
+  );
 
   return (
     <PageContainer>
@@ -58,6 +62,21 @@ export function FolderPage() {
           />
         </div>
       ) : (
+        <>
+        <div className="mb-3 flex items-center justify-end gap-2.5">
+          <span className="text-[13px] font-medium text-slate-500">Sort by date created</span>
+          <SegmentedControl
+            label="Sort Study Sets by date created"
+            tone="raised"
+            size="sm"
+            value={sort}
+            onChange={(studySetSort) => updateSettings({ studySetSort })}
+            options={[
+              { value: 'newest', label: 'Newest' },
+              { value: 'oldest', label: 'Oldest' },
+            ]}
+          />
+        </div>
         <ul className="overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
           {sets.map((set) => {
             const count = vocabOf(set.id).length;
@@ -85,6 +104,7 @@ export function FolderPage() {
             );
           })}
         </ul>
+        </>
       )}
 
       <NameDialog

@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { AppData, Difficulty, Folder, ReviewHistory, ReviewMode, SessionType, Settings, StudySet, Vocabulary } from '../types';
+import { DEFAULT_SETTINGS } from '../types';
 import { dataService, type DataService } from '../services/dataService';
 import { changeDifficulty, completeReview, createNewVocabularyFields } from '../utils/spacedRepetition';
 import { createId } from '../utils/id';
@@ -45,7 +46,7 @@ const EMPTY: AppData = {
   studySets: [],
   vocabulary: [],
   reviewHistory: [],
-  settings: { dailyReviewLimit: 30, preferredReviewMode: 'flashcard', flashcardFront: 'english' },
+  settings: { ...DEFAULT_SETTINGS },
 };
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -206,6 +207,8 @@ export function AppDataProvider({ children, service = dataService }: { children:
         // Daily Review only contains due words; manual study ahead of schedule
         // should not push a word further out.
         advanceWhenNotDue: input.sessionType === 'daily',
+        // A wrong dictation answer means the word was forgotten.
+        forgot: input.reviewMode === 'dictation' && input.isCorrect === false,
       });
       const entry: ReviewHistory = {
         id: createId('review'),

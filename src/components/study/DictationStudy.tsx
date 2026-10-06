@@ -7,6 +7,7 @@ import { Button } from '../Button';
 import { SourceLabel } from './CardMeta';
 import { answerKey, diffChars, isCorrectAnswer } from '../../utils/answer';
 import { cn } from '../../utils/cn';
+import { AutoTextarea } from '../AutoTextarea';
 
 interface Props {
   word: Vocabulary;
@@ -26,7 +27,7 @@ function promptSize(text: string) {
 
 export function DictationStudy({ word, source, result, onCheck, onDifficultyChange, isLast, onNext }: Props) {
   const [answer, setAnswer] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
   const inputId = useId();
 
@@ -76,13 +77,20 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
         <label htmlFor={inputId} className="mb-2 block text-[13px] font-semibold text-slate-600">
           English
         </label>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <input
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
+          <AutoTextarea
             id={inputId}
             ref={inputRef}
             lang="en"
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
+            onKeyDown={(e) => {
+              // Enter checks (or moves on); Shift+Enter adds a new line.
+              if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+                e.preventDefault();
+                e.currentTarget.form?.requestSubmit();
+              }
+            }}
             readOnly={!!result}
             placeholder="Type the English term"
             autoComplete="off"
@@ -90,21 +98,21 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
             autoCorrect="off"
             spellCheck={false}
             className={cn(
-              'h-14 w-full rounded-2xl border bg-white px-5 text-lg font-medium text-ink outline-none transition placeholder:font-normal placeholder:text-slate-400',
+              'block min-h-14 w-full resize-none overflow-hidden rounded-2xl border bg-white px-5 py-[15px] text-lg font-medium leading-[24px] text-ink outline-none transition placeholder:font-normal placeholder:text-slate-400',
               !result && 'border-line focus:border-blue-500 focus:ring-4 focus:ring-blue-100',
               result?.correct && 'border-blue-500 bg-blue-50/50 ring-4 ring-blue-100',
               result && !result.correct && 'animate-shake border-red-300 bg-red-50/30 ring-4 ring-red-50',
             )}
           />
           {!result && (
-            <Button type="submit" size="lg" disabled={!answer.trim()} className="h-14 rounded-2xl sm:min-w-[140px]" icon={<CornerDownLeft size={17} aria-hidden />}>
+            <Button type="submit" size="lg" disabled={!answer.trim()} className="h-14 shrink-0 rounded-2xl sm:min-w-[140px]" icon={<CornerDownLeft size={17} aria-hidden />}>
               Check
             </Button>
           )}
         </div>
 
         {!result && (
-          <div className="mt-3 flex justify-center sm:justify-start">
+          <div className="mt-3 flex items-center justify-center sm:justify-between">
             <button
               type="button"
               onClick={() => check('')}
@@ -112,6 +120,9 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
             >
               I don't know — show answer
             </button>
+            <span className="hidden text-xs text-slate-400 sm:block">
+              <kbd className="font-sans">Enter</kbd> check · <kbd className="font-sans">Shift + Enter</kbd> new line
+            </span>
           </div>
         )}
 
@@ -134,7 +145,7 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
                 <div className="grid divide-y divide-line/70 sm:grid-cols-2 sm:divide-x sm:divide-y-0">
                   <div className="px-5 py-4">
                     <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-red-600/80">Your answer</div>
-                    <div lang="en" className="mt-1 break-words text-lg font-medium text-slate-700">
+                    <div lang="en" className="mt-1 whitespace-pre-line break-words text-lg font-medium text-slate-700">
                       {result.answer ? (
                         diffChars(result.answer, key).map((c, i) => (
                           <span key={i} className={cn(!c.ok && 'rounded-[3px] bg-red-100 text-red-700 underline decoration-red-400 decoration-2 underline-offset-4')}>

@@ -3,16 +3,17 @@ import { addDays, diffInCalendarDays, startOfDay } from './date';
 
 /**
  * Review intervals (in days) per difficulty. Stage n uses SCHEDULES[d][n - 1].
- * After the final stage, the last interval repeats forever.
+ * After the final stage, the last interval (1 year) repeats forever.
  *
- *   Hard:   1 → 3 → 7 → 30 → 60 → 60 …
- *   Medium: 3 → 30 → 60 → 60 …
- *   Easy:   7 → 60 → 60 …
+ *   Hard:   1 → 3 → 7 → 30 → 60 → 120 → 240 → 365 → 365 …
+ *   Medium: 3 → 30 → 60 → 120 → 240 → 365 → 365 …
+ *   Easy:   7 → 60 → 120 → 240 → 365 → 365 …
  */
+const LONG_TERM = [120, 240, 365] as const;
 export const SCHEDULES: Record<Difficulty, readonly number[]> = {
-  hard: [1, 3, 7, 30, 60],
-  medium: [3, 30, 60],
-  easy: [7, 60],
+  hard: [1, 3, 7, 30, 60, ...LONG_TERM],
+  medium: [3, 30, 60, ...LONG_TERM],
+  easy: [7, 60, ...LONG_TERM],
 };
 
 /** Interval in days for a given difficulty and stage (stage >= 1). */
@@ -73,6 +74,11 @@ export interface CompleteReviewOptions {
    * in a Study Set should not push it further out). Defaults to true.
    */
   advanceWhenNotDue?: boolean;
+  /**
+   * The user did not remember the word (a wrong dictation answer). The word
+   * restarts at Stage 1 of its current difficulty instead of advancing.
+   */
+  forgot?: boolean;
 }
 
 /**
@@ -80,10 +86,10 @@ export interface CompleteReviewOptions {
  * Updates lastReviewedAt, advances reviewStage and recalculates nextReviewAt.
  */
 export function completeReview(current: Vocabulary, now: Date = new Date(), options: CompleteReviewOptions = {}): Vocabulary {
-  const { snapshot, advanceWhenNotDue = true } = options;
+  const { snapshot, advanceWhenNotDue = true, forgot = false } = options;
   const reviewedAt = now.toISOString();
 
-  if (snapshot && snapshot.difficulty !== current.difficulty) {
+  if (forgot || (snapshot && snapshot.difficulty !== current.difficulty)) {
     return {
       ...current,
       reviewStage: 1,

@@ -19,14 +19,14 @@ function vocab(partial: Partial<Vocabulary> = {}): Vocabulary {
 const daysUntil = (iso: string) => diffInCalendarDays(iso, now);
 
 describe('getReviewInterval', () => {
-  it('follows the hard schedule 1 → 3 → 7 → 30 → 60 → 60', () => {
-    expect([1, 2, 3, 4, 5, 6, 9].map((s) => getReviewInterval('hard', s))).toEqual([1, 3, 7, 30, 60, 60, 60]);
+  it('follows the hard schedule 1 → 3 → 7 → 30 → 60 → 120 → 240 → 365 → 365', () => {
+    expect([1, 2, 3, 4, 5, 6, 7, 8, 9, 20].map((s) => getReviewInterval('hard', s))).toEqual([1, 3, 7, 30, 60, 120, 240, 365, 365, 365]);
   });
-  it('follows the medium schedule 3 → 30 → 60 → 60', () => {
-    expect([1, 2, 3, 4, 8].map((s) => getReviewInterval('medium', s))).toEqual([3, 30, 60, 60, 60]);
+  it('follows the medium schedule 3 → 30 → 60 → 120 → 240 → 365 → 365', () => {
+    expect([1, 2, 3, 4, 5, 6, 7, 12].map((s) => getReviewInterval('medium', s))).toEqual([3, 30, 60, 120, 240, 365, 365, 365]);
   });
-  it('follows the easy schedule 7 → 60 → 60', () => {
-    expect([1, 2, 3, 7].map((s) => getReviewInterval('easy', s))).toEqual([7, 60, 60, 60]);
+  it('follows the easy schedule 7 → 60 → 120 → 240 → 365 → 365', () => {
+    expect([1, 2, 3, 4, 5, 6, 10].map((s) => getReviewInterval('easy', s))).toEqual([7, 60, 120, 240, 365, 365, 365]);
   });
 });
 
@@ -55,8 +55,19 @@ describe('completeReview', () => {
       v = completeReview(v, now);
       seen.push(daysUntil(v.nextReviewAt));
     }
-    expect(seen).toEqual([1, 3, 7, 30, 60, 60, 60]);
+    expect(seen).toEqual([1, 3, 7, 30, 60, 120, 240]);
     expect(v.lastReviewedAt).toBe(now.toISOString());
+  });
+
+  it('restarts at stage 1 of the current difficulty when forgotten', () => {
+    const medium = vocab({ difficulty: 'medium', reviewStage: 3 });
+    const reviewed = completeReview(medium, now, { snapshot: medium, forgot: true });
+    expect(reviewed.difficulty).toBe('medium');
+    expect(reviewed.reviewStage).toBe(1);
+    expect(daysUntil(reviewed.nextReviewAt)).toBe(3);
+    expect(reviewed.lastReviewedAt).toBe(now.toISOString());
+    const hard = completeReview(vocab({ reviewStage: 5 }), now, { forgot: true });
+    expect(daysUntil(hard.nextReviewAt)).toBe(1);
   });
 
   it('confirms stage 1 of a difficulty changed during the card', () => {

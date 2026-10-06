@@ -90,3 +90,11 @@ export function countByDifficulty(vocabulary: Pick<Vocabulary, 'difficulty'>[]):
   for (const v of vocabulary) counts[v.difficulty] += 1;
   return counts;
 }
+
+/** How many waiting words "Review more" adds after today's review is done. */
+export const EXTRA_REVIEW_SIZE = 10;
+
+/** The next highest-priority waiting words, for an optional extra session. */
+export function getExtraReview(plan: TodayPlan, size = EXTRA_REVIEW_SIZE): Vocabulary[] {
+  return plan.selected.length > 0 ? [] : plan.waiting.slice(0, size);
+}

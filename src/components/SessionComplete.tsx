@@ -60,7 +60,7 @@ export function SessionComplete({ title, reviewed, correct, backTo, backLabel, s
           {backLabel}
         </Link>
         {secondary && (
-          <Link to={secondary.to} className={buttonClass({ variant: 'ghost', block: true })}>
+          <Link to={secondary.to} className={buttonClass({ variant: 'secondary', size: 'lg', block: true })}>
             {secondary.label}
           </Link>
         )}
