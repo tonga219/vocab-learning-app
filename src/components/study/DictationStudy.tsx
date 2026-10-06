@@ -5,7 +5,7 @@ import type { DictationResult } from '../../hooks/useStudySession';
 import { DifficultySelector } from '../DifficultySelector';
 import { Button } from '../Button';
 import { SourceLabel } from './CardMeta';
-import { diffChars, isCorrectAnswer } from '../../utils/answer';
+import { answerKey, diffChars, isCorrectAnswer } from '../../utils/answer';
 import { cn } from '../../utils/cn';
 
 interface Props {
@@ -39,6 +39,7 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
     if (result) nextRef.current?.focus({ preventScroll: true });
   }, [result]);
 
+  const key = answerKey(word.term) || word.term;
   const check = (value = answer) => onCheck({ answer: value.trim(), correct: isCorrectAnswer(value, word.term) });
 
   return (
@@ -135,7 +136,7 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
                     <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-red-600/80">Your answer</div>
                     <div lang="en" className="mt-1 break-words text-lg font-medium text-slate-700">
                       {result.answer ? (
-                        diffChars(result.answer, word.term).map((c, i) => (
+                        diffChars(result.answer, key).map((c, i) => (
                           <span key={i} className={cn(!c.ok && 'rounded-[3px] bg-red-100 text-red-700 underline decoration-red-400 decoration-2 underline-offset-4')}>
                             {c.char}
                           </span>
@@ -147,15 +148,20 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
                   </div>
                   <div className="bg-blue-50/40 px-5 py-4">
                     <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-blue-700">Correct answer</div>
-                    <div lang="en" className="mt-1 whitespace-pre-line break-words text-lg font-semibold text-ink">
+                    <div lang="en" className="mt-1 break-words text-lg font-semibold text-ink">
                       {result.answer
-                        ? diffChars(word.term, result.answer).map((c, i) => (
+                        ? diffChars(key, result.answer).map((c, i) => (
                             <span key={i} className={cn(!c.ok && 'rounded-[3px] bg-blue-100 text-blue-800')}>
                               {c.char}
                             </span>
                           ))
-                        : word.term}
+                        : key}
                     </div>
+                    {key !== word.term.trim() && (
+                      <div lang="en" className="mt-1 whitespace-pre-line break-words text-[13px] text-muted">
+                        {word.term}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

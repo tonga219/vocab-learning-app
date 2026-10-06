@@ -1,19 +1,39 @@
-/** Normalizes an answer for comparison: case, whitespace, surrounding punctuation. */
-export function normalizeAnswer(text: string): string {
-  return text
-    .normalize('NFC')
-    .toLowerCase()
-    .replace(/[’‘]/g, "'")
+/**
+ * The part of a term that dictation checks: the first line only, with
+ * anything in parentheses removed. "deteriorate (v)" → "deteriorate",
+ * "look up (phrasal verb)\nexample…" → "look up".
+ */
+export function answerKey(term: string): string {
+  const firstLine = term.split(/\r?\n/).find((line) => line.trim()) ?? '';
+  return firstLine
+    .replace(/\([^)]*\)?/g, ' ')
     .replace(/\s+/g, ' ')
-    .replace(/^[\s.,;:!?"']+|[\s.,;:!?"']+$/g, '')
     .trim();
 }
 
+/**
+ * Normalizes text for comparison. Ignores letter case, periods, hyphens vs
+ * spaces, extra spaces and surrounding punctuation. Every letter must still match.
+ */
+export function normalizeAnswer(text: string): string {
+  return answerKey(text)
+    .normalize('NFC')
+    .toLowerCase()
+    .replace(/[’‘]/g, "'")
+    .replace(/\./g, '')
+    .replace(/[-‐‑–—]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .replace(/^[\s,;:!?"']+|[\s,;:!?"']+$/g, '')
+    .trim();
+}
+
+/** Exact match after normalization (no typo tolerance). */
 export function isCorrectAnswer(answer: string, term: string): boolean {
   const a = normalizeAnswer(answer);
   if (!a) return false;
+  const key = answerKey(term);
   // Accept any of the alternatives in "a / b" style terms.
-  const options = [term, ...term.split('/')].map(normalizeAnswer).filter(Boolean);
+  const options = [key, ...key.split('/')].map(normalizeAnswer).filter(Boolean);
   return options.includes(a);
 }
 

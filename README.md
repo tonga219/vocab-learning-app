@@ -78,6 +78,17 @@ Rules for when a word is reviewed:
   2. Take the top `dailyReviewLimit` words. Empty slots are never filled with words that aren't due, and words left out keep their dates.
   3. Words already reviewed in today's Daily Review count toward the limit.
 
+### Dictation answer checking (`src/utils/answer.ts`)
+
+An answer is correct only on an exact match after these rules:
+
+- Only the first line of the term is checked; later lines are notes.
+- Anything in parentheses is ignored: `deteriorate (v)` → `deteriorate`.
+- Letter case, periods, and hyphen vs space are ignored: `cutting-edge` = `cutting edge`.
+- `a / b` terms accept either alternative.
+
+There is no typo tolerance.
+
 ### Replacing localStorage with Supabase
 
 The UI never reads storage directly. It calls `useAppData()` actions, which update state immediately and then persist through the async `DataService` interface (`src/services/dataService.ts`). To move to Supabase:
