@@ -72,8 +72,11 @@ export function AppDataProvider({ children, service = dataService }: { children:
       commit(loaded);
       setReady(true);
     });
+    // Changes synced from another device.
+    const unsubscribe = service.subscribe?.((next) => commit(next));
     return () => {
       cancelled = true;
+      unsubscribe?.();
     };
   }, [service, commit]);
 

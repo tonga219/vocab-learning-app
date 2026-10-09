@@ -2,7 +2,7 @@
 
 Cadence picks the vocabulary you should review each day. The **Today** screen uses spaced repetition to choose up to 30 of your highest-priority due words from every Study Set. You review them with flashcards or dictation.
 
-Built with React, TypeScript, Vite, Tailwind CSS and Lucide icons. It has no backend: data is saved in the browser's `localStorage`.
+Built with React, TypeScript, Vite, Tailwind CSS and Lucide icons. Data is saved in the browser's `localStorage`, and optionally synced across devices through Supabase.
 
 ## Live app
 
@@ -58,7 +58,8 @@ src/
 | --- | --- |
 | Spaced repetition (`getReviewInterval`, `calculateNextReview`, `changeDifficulty`, `completeReview`) | `src/utils/spacedRepetition.ts` |
 | Daily Priority engine (`getDueVocabulary`, `sortByPriority`, `getTodayReview`, `getTodayPlan`) | `src/utils/dailyPriority.ts` |
-| localStorage access | `src/services/storage.ts` (adapter), used only by `src/services/dataService.ts` |
+| localStorage access | `src/services/storage.ts` (adapter), used only by `src/services/dataService.ts` and the sync queue |
+| Cross-device sync | `src/services/sync.ts` (engine), `src/services/supabase.ts` (Supabase adapter) |
 
 ### Scheduling rules
 
@@ -92,9 +93,42 @@ An answer is correct only on an exact match after these rules:
 
 There is no typo tolerance.
 
-### Replacing localStorage with Supabase
+### Sync across devices (Supabase)
 
-The UI never reads storage directly. It calls `useAppData()` actions, which update state immediately and then persist through the async `DataService` interface (`src/services/dataService.ts`). To move to Supabase:
+Data is always kept in `localStorage` first, so the app works offline. When the user signs in (Settings → Sync across devices, email + password), `src/services/sync.ts` keeps it in sync with Supabase:
 
-1. Implement `DataService` with Supabase table calls (`upsertFolder`, `upsertVocabulary`, `addReviewHistory` and the rest).
-2. Pass the new implementation to `<AppDataProvider service={…}>`.
+- Each local change is turned into records (`src/utils/syncRecords.ts`) and queued. The queue is saved, so changes survive reloads and offline periods. It is pushed about 1.5 seconds after the last change.
+- On start, focus, coming back online and every 60 seconds, the app pulls records changed since the last pull. For each record the newer edit wins; deletions sync as tombstones.
+- The first sign-in on a device merges that device's words into the account instead of replacing them.
+
+Connection settings live in `src/services/supabase.ts`. The publishable key is public by design; Row Level Security limits each user to their own rows. You can override both with `VITE_SUPABASE_URL` and `VITE_SUPABASE_KEY`.
+
+Supabase setup (once): run this in the SQL Editor, then turn off **Authentication → Email → Confirm email**.
+
+```sql
+create table if not exists public.records (
+  user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  kind text not null,
+  id text not null,
+  data jsonb,
+  deleted boolean not null default false,
+  client_updated_at timestamptz not null,
+  server_updated_at timestamptz not null default now(),
+  primary key (user_id, kind, id)
+);
+create index if not exists records_sync_idx on public.records (user_id, server_updated_at);
+alter table public.records enable row level security;
+create policy "Users manage their own records" on public.records
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create or replace function public.records_touch() returns trigger language plpgsql as $$
+begin
+  if tg_op = 'UPDATE' and new.client_updated_at < old.client_updated_at then
+    return old;
+  end if;
+  new.server_updated_at := now();
+  return new;
+end;
+$$;
+create trigger records_touch before insert or update on public.records
+  for each row execute function public.records_touch();
+```

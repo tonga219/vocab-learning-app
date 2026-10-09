@@ -7,6 +7,7 @@ import { SegmentedControl } from '../components/SegmentedControl';
 import { Button } from '../components/Button';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { hasDemoData } from '../utils/dataOps';
+import { SyncPanel } from '../components/SyncPanel';
 
 const LIMITS = ['10', '20', '30', '50', 'unlimited'] as const;
 type LimitValue = (typeof LIMITS)[number];
@@ -34,6 +35,13 @@ export function SettingsPage() {
   return (
     <PageContainer>
       <PageHeader title="Settings" />
+
+      <Section
+        title="Sync across devices"
+        description="Sign in on each device to keep your words and progress the same everywhere."
+      >
+        <SyncPanel />
+      </Section>
 
       <Section
         title="Daily review limit"
@@ -100,7 +108,7 @@ export function SettingsPage() {
         description={
           <span className="inline-flex items-start gap-1.5">
             <HardDrive size={14} className="mt-0.5 shrink-0" aria-hidden />
-            Everything is saved locally in this browser.
+            Saved in this browser, and in your account when you’re signed in.
           </span>
         }
       >

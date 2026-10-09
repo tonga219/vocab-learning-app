@@ -5,6 +5,7 @@ import { useAppData } from '../hooks/useAppData';
 import { useToday } from '../hooks/useToday';
 import { getTodayPlan } from '../utils/dailyPriority';
 import { cn } from '../utils/cn';
+import { SyncStatusBadge } from './SyncPanel';
 
 const NAV = [
   { to: '/', label: 'Today', icon: CalendarCheck2, end: true },
@@ -78,14 +79,16 @@ export function Layout() {
             </NavLink>
           ))}
         </nav>
-        <div className="mt-auto px-3 text-xs leading-relaxed text-slate-400">
-          Your daily words, chosen for you.
+        <div className="mt-auto flex flex-col gap-2 px-3 text-xs leading-relaxed text-slate-400">
+          <SyncStatusBadge />
+          <span>Your daily words, chosen for you.</span>
         </div>
       </aside>
 
       {/* Mobile header */}
-      <header className="sticky top-0 z-20 flex h-14 items-center border-b border-line/60 bg-canvas/85 px-5 backdrop-blur-md lg:hidden">
+      <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-4 border-b border-line/60 bg-canvas/85 px-5 backdrop-blur-md lg:hidden">
         <Logo />
+        <SyncStatusBadge className="min-w-0" />
       </header>
 
       <main className="min-w-0 flex-1 pb-[calc(88px+env(safe-area-inset-bottom))] lg:pb-0">

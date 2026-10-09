@@ -3,6 +3,7 @@ import { DEFAULT_SETTINGS } from '../types';
 import { createDemoData } from '../data/demoData';
 import { LocalStorageAdapter, type StorageAdapter } from './storage';
 import * as ops from '../utils/dataOps';
+import type { SyncableStore } from './sync';
 
 /**
  * The application's data layer. Every method is async so a remote backend
@@ -21,6 +22,8 @@ export interface DataService {
   saveSettings(settings: Settings): Promise<void>;
   /** Replace everything (used for loading / removing demo data and resets). */
   replaceAll(data: AppData): Promise<void>;
+  /** Notifies when data changes from elsewhere (e.g. sync from another device). */
+  subscribe?(listener: (data: AppData) => void): () => void;
 }
 
 const STORAGE_KEY = 'cadence.data.v1';
@@ -29,8 +32,10 @@ interface StoredData extends AppData {
   version: 1;
 }
 
-export class LocalDataService implements DataService {
+export class LocalDataService implements DataService, SyncableStore {
   private data: AppData | null = null;
+  private localListeners = new Set<(prev: AppData, next: AppData) => void>();
+  private remoteListeners = new Set<(data: AppData) => void>();
 
   constructor(private readonly storage: StorageAdapter = new LocalStorageAdapter()) {}
 
@@ -74,6 +79,30 @@ export class LocalDataService implements DataService {
     this.mutate(() => data);
   }
 
+  getSnapshot(): AppData {
+    return this.ensureLoaded();
+  }
+
+  applyRemote(data: AppData) {
+    this.data = data;
+    this.persist();
+    for (const l of this.remoteListeners) l(structuredClone(data));
+  }
+
+  onLocalChange(listener: (prev: AppData, next: AppData) => void) {
+    this.localListeners.add(listener);
+    return () => {
+      this.localListeners.delete(listener);
+    };
+  }
+
+  subscribe(listener: (data: AppData) => void) {
+    this.remoteListeners.add(listener);
+    return () => {
+      this.remoteListeners.delete(listener);
+    };
+  }
+
   private ensureLoaded(): AppData {
     if (this.data) return this.data;
     const stored = this.storage.read<StoredData>(STORAGE_KEY);
@@ -94,8 +123,10 @@ export class LocalDataService implements DataService {
   }
 
   private mutate(fn: (data: AppData) => AppData) {
-    this.data = fn(this.ensureLoaded());
+    const prev = this.ensureLoaded();
+    this.data = fn(prev);
     this.persist();
+    for (const l of this.localListeners) l(prev, this.data);
   }
 
   private persist() {
@@ -113,4 +144,5 @@ function upsert<T extends { id: string }>(list: T[], item: T): T[] {
   return next;
 }
 
-export const dataService: DataService = new LocalDataService();
+export const localDataService = new LocalDataService();
+export const dataService: DataService = localDataService;

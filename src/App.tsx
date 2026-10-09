@@ -10,9 +10,15 @@ import { AddVocabularyPage } from './pages/AddVocabularyPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { DailyReviewPage, ManualStudyPage } from './pages/ReviewPages';
 import { ScrollToTop } from './components/ScrollToTop';
+import { useEffect } from 'react';
+import { getSyncEngine } from './hooks/useSync';
 
 function AppRoutes() {
   const { ready } = useAppData();
+  // Start syncing (restores the signed-in account, if any) once local data is loaded.
+  useEffect(() => {
+    if (ready) getSyncEngine();
+  }, [ready]);
   if (!ready) {
     return (
       <div className="flex min-h-dvh items-center justify-center" aria-busy="true">
