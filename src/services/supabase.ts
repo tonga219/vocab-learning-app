@@ -6,8 +6,8 @@ import type { AuthClient, AuthUser, RemoteStore } from './sync';
  * Public project settings. The publishable key is meant to ship in the
  * browser; Row Level Security limits every user to their own rows.
  */
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? 'https://fvcwqhyvzdfknlhnvibf.supabase.co';
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY ?? 'sb_publishable_rWOgYduxAMud-_gGUHfdmw_xKjswVKL';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? 'https://xbnbieunmybetqhhkxqk.supabase.co';
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY ?? 'sb_publishable_7JLomD9tMpZqwKUmiu84sQ_LhdBF8u4';
 
 const PAGE = 1000;
 const PUSH_CHUNK = 500;
@@ -82,7 +82,7 @@ function friendlyAuthError(message: string): string {
   if (/already registered|already exists/i.test(message)) return 'This email already has an account. Sign in instead.';
   if (/password should be at least/i.test(message)) return 'Password must be at least 6 characters.';
   if (/email not confirmed/i.test(message)) return 'This email is not confirmed yet. Check your inbox, or turn off "Confirm email" in Supabase.';
-  if (/failed to fetch|network/i.test(message)) return 'Can’t reach the sync server. Check your connection.';
+  if (/failed to fetch|network/i.test(message)) return 'Can’t reach the sync server. Check your connection, or restore the project if it is paused in Supabase.';
   return message;
 }
 
