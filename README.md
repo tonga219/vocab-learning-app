@@ -107,6 +107,8 @@ Data is always kept in `localStorage` first, so the app works offline. When the 
 
 Connection settings live in `src/services/supabase.ts`. The publishable key is public by design; Row Level Security limits each user to their own rows. You can override both with `VITE_SUPABASE_URL` and `VITE_SUPABASE_KEY`.
 
+`.github/workflows/keep-alive.yml` queries the database every 3 days so the free Supabase project is not paused for inactivity. If a run fails, open the project in Supabase and press **Restore project**.
+
 Supabase setup (once): run this in the SQL Editor, then turn off **Authentication → Email → Confirm email**.
 
 ```sql

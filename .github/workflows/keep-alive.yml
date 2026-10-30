@@ -1,0 +1,27 @@
+name: Keep Supabase awake
+
+# Supabase pauses free projects after about a week without activity.
+# This runs a tiny read every 3 days so sync keeps working even when the
+# app isn't opened for a while. The publishable key is public by design.
+on:
+  schedule:
+    - cron: '17 3 */3 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query the database
+        env:
+          SUPABASE_URL: https://xbnbieunmybetqhhkxqk.supabase.co
+          SUPABASE_KEY: sb_publishable_7JLomD9tMpZqwKUmiu84sQ_LhdBF8u4
+        run: |
+          curl --fail-with-body --silent --show-error --max-time 30 --retry 3 --retry-delay 10 \
+            "$SUPABASE_URL/rest/v1/records?select=id&limit=1" \
+            -H "apikey: $SUPABASE_KEY"
+          echo
+          echo "Supabase is awake."
