@@ -31,7 +31,7 @@ function LearnTile({
   disabled: boolean;
 }) {
   const className = cn(
-    'group flex items-center gap-4 rounded-2xl border border-line bg-white p-4 shadow-soft transition-all duration-200 sm:p-5',
+    'group flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 shadow-soft transition-all duration-200 sm:p-5',
     disabled ? 'pointer-events-none opacity-50' : 'hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-lift active:translate-y-0',
   );
   const content = (
@@ -133,7 +133,7 @@ export function StudySetPage() {
         </div>
 
         {empty ? (
-          <div className="rounded-[24px] border border-dashed border-slate-300 bg-white/60">
+          <div className="rounded-[24px] border border-dashed border-slate-300 bg-surface/60">
             <EmptyState
               icon={<ListPlus size={24} />}
               title="Your Study Set is empty."
@@ -148,7 +148,7 @@ export function StudySetPage() {
           </div>
         ) : (
           <>
-            <ul className="divide-y divide-line/70 overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
+            <ul className="divide-y divide-line/70 overflow-hidden rounded-2xl border border-line bg-surface shadow-soft">
               {words.map((v) => (
                 <VocabularyRow
                   key={v.id}

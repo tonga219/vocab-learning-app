@@ -77,7 +77,7 @@ export function SyncPanel() {
   if (sync.user) {
     return (
       <div className="space-y-4">
-        <div className="rounded-2xl border border-line bg-white p-4">
+        <div className="rounded-2xl border border-line bg-surface p-4">
           <div className="text-[13px] text-muted">Signed in as</div>
           <div className="truncate text-[15px] font-semibold text-ink">{sync.user.email}</div>
           <div className="mt-2">

@@ -49,7 +49,7 @@ export function FolderPage() {
       />
 
       {sets.length === 0 ? (
-        <div className="rounded-[24px] border border-dashed border-slate-300 bg-white/60">
+        <div className="rounded-[24px] border border-dashed border-slate-300 bg-surface/60">
           <EmptyState
             icon={<Layers size={24} />}
             title="No Study Sets yet"
@@ -77,7 +77,7 @@ export function FolderPage() {
             ]}
           />
         </div>
-        <ul className="overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
+        <ul className="overflow-hidden rounded-2xl border border-line bg-surface shadow-soft">
           {sets.map((set) => {
             const count = vocabOf(set.id).length;
             return (
@@ -86,7 +86,7 @@ export function FolderPage() {
                   to={`/library/${folder.id}/${set.id}`}
                   className="flex items-center gap-4 px-4 py-4 pr-14 transition-colors hover:bg-slate-50 sm:px-5 sm:pr-16"
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-white text-slate-500 shadow-soft transition-colors group-hover:border-blue-200 group-hover:text-blue-600">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-slate-500 shadow-soft transition-colors group-hover:border-blue-200 group-hover:text-blue-600">
                     <Layers size={18} aria-hidden />
                   </span>
                   <span className="min-w-0 flex-1">

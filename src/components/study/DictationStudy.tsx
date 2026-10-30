@@ -52,8 +52,8 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
 
       {/* Prompt card */}
       <div key={word.id} className="relative mt-5 animate-card-in-right sm:mt-6">
-        <div aria-hidden className="absolute inset-x-3 -bottom-1.5 top-3 rounded-[22px] border border-slate-200/80 bg-white/90 shadow-soft" />
-        <div className="relative flex min-h-[200px] flex-col rounded-[22px] border border-slate-200/90 bg-white shadow-card sm:min-h-[240px]">
+        <div aria-hidden className="absolute inset-x-3 -bottom-1.5 top-3 rounded-[22px] border border-slate-200/80 bg-surface/90 shadow-soft" />
+        <div className="relative flex min-h-[200px] flex-col rounded-[22px] border border-slate-200/90 bg-surface shadow-card sm:min-h-[240px]">
           <div className="px-6 pt-5 sm:px-8 sm:pt-6">
             <span className="eyebrow">Vietnamese</span>
             <div className="mt-4 h-px bg-gradient-to-r from-blue-200 via-blue-100 to-transparent" aria-hidden />
@@ -98,7 +98,7 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
             autoCorrect="off"
             spellCheck={false}
             className={cn(
-              'block min-h-14 w-full resize-none overflow-hidden rounded-2xl border bg-white px-5 py-[15px] text-lg font-medium leading-[24px] text-ink outline-none transition placeholder:font-normal placeholder:text-slate-400',
+              'block min-h-14 w-full resize-none overflow-hidden rounded-2xl border bg-surface px-5 py-[15px] text-lg font-medium leading-[24px] text-ink outline-none transition placeholder:font-normal placeholder:text-slate-400',
               !result && 'border-line focus:border-blue-500 focus:ring-4 focus:ring-blue-100',
               result?.correct && 'border-blue-500 bg-blue-50/50 ring-4 ring-blue-100',
               result && !result.correct && 'animate-shake border-red-300 bg-red-50/30 ring-4 ring-red-50',
@@ -141,7 +141,7 @@ export function DictationStudy({ word, source, result, onCheck, onDifficultyChan
                 </div>
               </div>
             ) : (
-              <div className="overflow-hidden rounded-2xl border border-line bg-white">
+              <div className="overflow-hidden rounded-2xl border border-line bg-surface">
                 <div className="grid divide-y divide-line/70 sm:grid-cols-2 sm:divide-x sm:divide-y-0">
                   <div className="px-5 py-4">
                     <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-red-600/80">Your answer</div>

@@ -43,7 +43,7 @@ export function SessionComplete({ title, reviewed, correct, backTo, backLabel, s
         {correct != null && ` · ${correct} correct`}
       </p>
 
-      <dl className="mt-8 grid w-full max-w-sm animate-fade-up grid-cols-3 divide-x divide-line rounded-2xl border border-line bg-white shadow-soft [animation-delay:320ms]">
+      <dl className="mt-8 grid w-full max-w-sm animate-fade-up grid-cols-3 divide-x divide-line rounded-2xl border border-line bg-surface shadow-soft [animation-delay:320ms]">
         {DIFFICULTIES.map((d) => (
           <div key={d} className="flex flex-col items-center gap-1.5 px-2 py-4">
             <dt className="flex items-center gap-1.5 text-[13px] font-medium text-muted">

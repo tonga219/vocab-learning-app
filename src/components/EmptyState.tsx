@@ -14,7 +14,7 @@ export function EmptyState({ icon, title, description, action, className }: Prop
     <div className={cn('flex animate-fade-up flex-col items-center px-6 py-14 text-center', className)}>
       <div className="relative mb-5">
         <div className="absolute inset-0 -m-3 rounded-[22px] bg-blue-50" aria-hidden />
-        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-100 bg-white text-blue-600 shadow-soft">
+        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-100 bg-surface text-blue-600 shadow-soft">
           {icon}
         </div>
       </div>

@@ -12,6 +12,7 @@ import { DailyReviewPage, ManualStudyPage } from './pages/ReviewPages';
 import { ScrollToTop } from './components/ScrollToTop';
 import { useEffect } from 'react';
 import { getSyncEngine } from './hooks/useSync';
+import { useApplyTheme } from './hooks/useTheme';
 
 function AppRoutes() {
   const { ready } = useAppData();
@@ -47,6 +48,7 @@ function AppRoutes() {
 const Router = import.meta.env.VITE_ROUTER === 'memory' ? MemoryRouter : BrowserRouter;
 
 export default function App() {
+  useApplyTheme();
   return (
     <Router basename={import.meta.env.BASE_URL.replace(/\/$/, '') || undefined}>
       <AppDataProvider>

@@ -44,9 +44,9 @@ function CardStackPreview({ words }: { words: Vocabulary[] }) {
   if (!top) return null;
   return (
     <div className="relative mr-4 hidden h-[188px] w-[244px] shrink-0 md:block lg:w-[264px]" aria-hidden>
-      <div className="absolute inset-0 translate-x-5 translate-y-4 rotate-[6deg] rounded-2xl border border-slate-200 bg-white shadow-soft" />
-      <div className="absolute inset-0 translate-x-2.5 translate-y-2 rotate-[3deg] rounded-2xl border border-slate-200 bg-white shadow-soft" />
-      <div className="absolute inset-0 flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-card transition-transform duration-300 hover:-translate-y-1 hover:-rotate-1">
+      <div className="absolute inset-0 translate-x-5 translate-y-4 rotate-[6deg] rounded-2xl border border-slate-200 bg-surface shadow-soft" />
+      <div className="absolute inset-0 translate-x-2.5 translate-y-2 rotate-[3deg] rounded-2xl border border-slate-200 bg-surface shadow-soft" />
+      <div className="absolute inset-0 flex flex-col rounded-2xl border border-slate-200 bg-surface p-5 shadow-card transition-transform duration-300 hover:-translate-y-1 hover:-rotate-1">
         <span className="eyebrow">First up</span>
         <div className="mt-3 h-px bg-gradient-to-r from-blue-200 to-transparent" />
         <div className="flex flex-1 items-center justify-center">
@@ -112,7 +112,7 @@ export function TodayPage() {
       </header>
 
       {data.vocabulary.length === 0 ? (
-        <section className="rounded-[28px] border border-line bg-white shadow-soft">
+        <section className="rounded-[28px] border border-line bg-surface shadow-soft">
           <EmptyState
             icon={<FolderPlus size={24} />}
             title="Nothing to review yet"
@@ -126,7 +126,7 @@ export function TodayPage() {
           />
         </section>
       ) : total === 0 ? (
-        <section className="relative overflow-hidden rounded-[28px] border border-line bg-white px-6 py-12 text-center shadow-soft sm:px-10 sm:py-16">
+        <section className="relative overflow-hidden rounded-[28px] border border-line bg-surface px-6 py-12 text-center shadow-soft sm:px-10 sm:py-16">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-blue-50/80 to-transparent" aria-hidden />
           <div className="relative mx-auto flex h-16 w-16 animate-ring-pop items-center justify-center rounded-full bg-blue-600 text-white shadow-[0_8px_24px_-6px_rgba(37,99,235,0.55)]">
             {reviewedToday > 0 ? <Check size={30} strokeWidth={2.6} /> : <Coffee size={26} />}
@@ -163,7 +163,7 @@ export function TodayPage() {
       ) : (
         <section
           aria-labelledby="today-review-heading"
-          className="relative overflow-hidden rounded-[28px] border border-line bg-white shadow-lift"
+          className="relative overflow-hidden rounded-[28px] border border-line bg-surface shadow-lift"
         >
           <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-blue-50 blur-2xl" aria-hidden />
           <div className="relative flex flex-col gap-8 p-6 sm:p-10 md:flex-row md:items-center md:justify-between">
@@ -205,7 +205,7 @@ export function TodayPage() {
           <h2 id="overview-heading" className="text-[15px] font-semibold tracking-tight text-ink">
             Today's overview
           </h2>
-          <div className="mt-3 flex divide-x divide-line rounded-2xl border border-line bg-white">
+          <div className="mt-3 flex divide-x divide-line rounded-2xl border border-line bg-surface">
             <OverviewStat label="Due" value={plan.due.length} hint="Ready for review now" />
             <OverviewStat label="Selected today" value={total} hint={limitHint(data.settings.dailyReviewLimit, reviewedToday)} />
             <OverviewStat label="Waiting" value={plan.waiting.length} hint="Stay overdue for tomorrow" />
@@ -228,7 +228,7 @@ export function TodayPage() {
               From {sourceCount} Study {sourceCount === 1 ? 'Set' : 'Sets'} · by priority
             </span>
           </div>
-          <ol className="mt-3 grid overflow-hidden rounded-2xl border border-line bg-white sm:grid-cols-2">
+          <ol className="mt-3 grid overflow-hidden rounded-2xl border border-line bg-surface sm:grid-cols-2">
             {visibleWords.map((v, i) => (
               <li
                 key={v.id}

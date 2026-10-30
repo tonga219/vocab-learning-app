@@ -43,7 +43,7 @@ export function Layout() {
   return (
     <div className="min-h-dvh lg:flex">
       {/* Desktop sidebar */}
-      <aside className="sticky top-0 hidden h-dvh w-[248px] shrink-0 flex-col border-r border-line/80 bg-white/60 px-4 py-6 backdrop-blur lg:flex">
+      <aside className="sticky top-0 hidden h-dvh w-[248px] shrink-0 flex-col border-r border-line/80 bg-surface/60 px-4 py-6 backdrop-blur lg:flex">
         <Logo className="px-2" />
         <nav aria-label="Main" className="mt-9 flex flex-col gap-1">
           {NAV.map(({ to, label, icon: Icon, end }) => (
@@ -100,7 +100,7 @@ export function Layout() {
       {/* Mobile bottom navigation */}
       <nav
         aria-label="Main"
-        className="safe-bottom fixed inset-x-0 bottom-0 z-30 border-t border-line/80 bg-white/90 backdrop-blur-md lg:hidden"
+        className="safe-bottom fixed inset-x-0 bottom-0 z-30 border-t border-line/80 bg-surface/90 backdrop-blur-md lg:hidden"
       >
         <div className="mx-auto grid h-16 max-w-md grid-cols-3">
           {NAV.map(({ to, label, icon: Icon, end }) => (
@@ -127,7 +127,7 @@ export function Layout() {
                     />
                     <Icon size={21} strokeWidth={isActive ? 2.2 : 1.8} className="relative" aria-hidden />
                     {to === '/' && remaining > 0 && (
-                      <span className="tabular absolute -right-3 -top-1.5 min-w-[18px] rounded-full bg-blue-600 px-1 text-center text-[10px] font-semibold leading-[18px] text-white ring-2 ring-white">
+                      <span className="tabular absolute -right-3 -top-1.5 min-w-[18px] rounded-full bg-blue-600 px-1 text-center text-[10px] font-semibold leading-[18px] text-white ring-2 ring-surface">
                         {remaining}
                       </span>
                     )}

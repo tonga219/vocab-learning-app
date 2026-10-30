@@ -85,7 +85,7 @@ export function RowMenu({ label, onRename, onDelete }: { label: string; onRename
             ref={menuRef}
             role="menu"
             aria-label={`Actions for ${label}`}
-            className="fixed z-50 animate-scale-in rounded-xl border border-line bg-white p-1 shadow-lift"
+            className="fixed z-50 animate-scale-in rounded-xl border border-line bg-surface p-1 shadow-lift"
             style={{ top: position.top, right: position.right, width: MENU_WIDTH }}
           >
             <button

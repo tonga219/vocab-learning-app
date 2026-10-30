@@ -81,6 +81,10 @@ Rules for when a word is reviewed:
   3. Words already reviewed in today's Daily Review count toward the limit.
   4. Once today's review is done, **Review 10 more** starts an optional session with the next 10 waiting words.
 
+### Light / dark mode
+
+Settings → Appearance offers Light, Dark or System (default: follows the device). Every color is a CSS variable in `src/index.css` (`:root` and `:root.dark`), wired into Tailwind in `tailwind.config.js`, so components need no per-theme classes. The choice is saved per device in `localStorage` (`src/services/theme.ts`) and applied by a small script in `index.html` before first paint.
+
 ### Dictation answer checking (`src/utils/answer.ts`)
 
 An answer is correct only on an exact match after these rules:

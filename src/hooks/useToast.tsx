@@ -27,9 +27,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className="flex animate-fade-up items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white shadow-lift"
+            className="flex animate-fade-up items-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-sm font-medium text-canvas shadow-lift"
           >
-            <CheckCircle2 size={16} className="text-blue-300" aria-hidden />
+            <CheckCircle2 size={16} className="text-blue-500" aria-hidden />
             {t.message}
           </div>
         ))}

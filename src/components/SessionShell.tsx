@@ -14,7 +14,7 @@ interface Props {
 /** Full-screen, distraction-free frame for study sessions. */
 export function SessionShell({ exitTo, exitLabel, title, progress, children }: Props) {
   return (
-    <div className="flex min-h-dvh flex-col bg-[radial-gradient(ellipse_at_top,#EFF6FF_0%,#F8FAFC_55%)]">
+    <div className="flex min-h-dvh flex-col bg-canvas bg-[radial-gradient(ellipse_at_top,rgb(var(--blue-50))_0%,rgb(var(--canvas))_55%)]">
       <header className="sticky top-0 z-20 border-b border-line/50 bg-canvas/70 backdrop-blur-md">
         <div className="mx-auto flex h-14 w-full max-w-[760px] items-center gap-3 px-4 sm:h-16 sm:px-6">
           <Link

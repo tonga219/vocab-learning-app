@@ -36,7 +36,7 @@ export function LibraryPage() {
       />
 
       {folders.length === 0 ? (
-        <div className="rounded-[24px] border border-dashed border-slate-300 bg-white/60">
+        <div className="rounded-[24px] border border-dashed border-slate-300 bg-surface/60">
           <EmptyState
             icon={<FolderPlus size={24} />}
             title="No folders yet"
@@ -57,7 +57,7 @@ export function LibraryPage() {
               <li key={folder.id} className="group relative">
                 <Link
                   to={`/library/${folder.id}`}
-                  className="flex items-center gap-4 rounded-2xl border border-line bg-white p-4 pr-14 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lift active:translate-y-0 sm:p-5 sm:pr-14"
+                  className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 pr-14 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lift active:translate-y-0 sm:p-5 sm:pr-14"
                 >
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100">
                     <FolderIcon size={20} aria-hidden />

@@ -65,7 +65,7 @@ export function Modal({ open, onClose, title, description, children, footer, siz
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6">
-      <div className="absolute inset-0 animate-fade-in bg-slate-900/30 backdrop-blur-[2px]" onClick={onClose} aria-hidden />
+      <div className="absolute inset-0 animate-fade-in bg-black/40 backdrop-blur-[2px]" onClick={onClose} aria-hidden />
       <div
         ref={panelRef}
         role="dialog"
@@ -73,7 +73,7 @@ export function Modal({ open, onClose, title, description, children, footer, siz
         aria-labelledby={titleId}
         tabIndex={-1}
         className={cn(
-          'relative w-full animate-sheet-in rounded-t-[22px] bg-white shadow-[0_24px_64px_-12px_rgba(15,23,42,0.25)] outline-none sm:animate-scale-in sm:rounded-2xl',
+          'relative w-full animate-sheet-in rounded-t-[22px] bg-surface shadow-[0_24px_64px_-12px_rgba(15,23,42,0.25)] outline-none sm:animate-scale-in sm:rounded-2xl',
           size === 'sm' ? 'sm:max-w-[420px]' : 'sm:max-w-[520px]',
         )}
       >

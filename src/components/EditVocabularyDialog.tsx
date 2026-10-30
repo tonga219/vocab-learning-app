@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const inputClass =
-  'block min-h-11 w-full resize-none overflow-hidden py-[11px] leading-[21px] rounded-xl border border-line bg-white px-3.5 text-[15px] text-ink outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100';
+  'block min-h-11 w-full resize-none overflow-hidden py-[11px] leading-[21px] rounded-xl border border-line bg-surface px-3.5 text-[15px] text-ink outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100';
 
 export function EditVocabularyDialog({ vocab, onClose, onSave, onDelete }: Props) {
   const [term, setTerm] = useState('');

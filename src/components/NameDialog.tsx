@@ -60,7 +60,7 @@ export function NameDialog({ open, title, label, placeholder, initialValue = '',
           placeholder={placeholder}
           maxLength={80}
           autoComplete="off"
-          className="h-11 w-full rounded-xl border border-line bg-white px-3.5 text-[15px] text-ink outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          className="h-11 w-full rounded-xl border border-line bg-surface px-3.5 text-[15px] text-ink outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
         />
       </form>
     </Modal>

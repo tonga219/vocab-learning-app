@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
-import { HardDrive, RotateCcw, Sparkles, Trash2 } from 'lucide-react';
+import { HardDrive, Monitor, Moon, RotateCcw, Sparkles, Sun, Trash2 } from 'lucide-react';
+import { useTheme } from '../hooks/useTheme';
 import { useAppData } from '../hooks/useAppData';
 import { useToast } from '../hooks/useToast';
 import { PageContainer, PageHeader } from '../components/Layout';
@@ -27,6 +28,7 @@ function Section({ title, description, children }: { title: string; description?
 export function SettingsPage() {
   const { data, updateSettings, restoreDemoData, removeDemoData, deleteAllData } = useAppData();
   const toast = useToast();
+  const theme = useTheme();
   const [confirm, setConfirm] = useState<'demo' | 'all' | null>(null);
   const demo = hasDemoData(data);
   const limit = data.settings.dailyReviewLimit;
@@ -67,6 +69,22 @@ export function SettingsPage() {
           {limit !== 30 && <span className="text-slate-400">30 is recommended.</span>}
           {limit === 30 && <span className="text-slate-400">Recommended.</span>}
         </p>
+      </Section>
+
+      <Section title="Appearance" description="Dark mode is easier on the eyes at night. System follows your device setting.">
+        <SegmentedControl
+          label="Appearance"
+          size="md"
+          tone="raised"
+          className="w-full max-w-[460px]"
+          value={theme.preference}
+          onChange={theme.setPreference}
+          options={[
+            { value: 'light', label: <span className="inline-flex items-center gap-2"><Sun size={15} aria-hidden /> Light</span>, ariaLabel: 'Light' },
+            { value: 'dark', label: <span className="inline-flex items-center gap-2"><Moon size={15} aria-hidden /> Dark</span>, ariaLabel: 'Dark' },
+            { value: 'system', label: <span className="inline-flex items-center gap-2"><Monitor size={15} aria-hidden /> System</span>, ariaLabel: 'System' },
+          ]}
+        />
       </Section>
 
       <Section

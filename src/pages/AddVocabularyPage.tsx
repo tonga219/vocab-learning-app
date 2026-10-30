@@ -32,7 +32,7 @@ function parseLines(text: string): { term: string; definition: string }[] | null
 }
 
 const fieldClass =
-  'block min-h-11 w-full resize-none overflow-hidden py-[11px] leading-[21px] rounded-xl border border-line bg-white px-3.5 text-[15px] text-ink outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100';
+  'block min-h-11 w-full resize-none overflow-hidden py-[11px] leading-[21px] rounded-xl border border-line bg-surface px-3.5 text-[15px] text-ink outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100';
 
 export function AddVocabularyPage() {
   const { folderId = '', setId = '' } = useParams();
@@ -115,7 +115,7 @@ export function AddVocabularyPage() {
         </p>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
+      <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-soft">
         <div className="hidden grid-cols-[32px_1fr_1fr_40px] gap-3 border-b border-line/70 bg-slate-50/70 px-4 py-2.5 sm:grid">
           <span />
           <span className="eyebrow">Term</span>
@@ -164,7 +164,7 @@ export function AddVocabularyPage() {
                   onChange={(e) => update(row.key, { definition: e.target.value })}
                   onKeyDown={(e) => onDefinitionKey(e, index)}
                   autoComplete="off"
-                  className={cn(fieldClass, 'bg-slate-50/50 sm:bg-white')}
+                  className={cn(fieldClass, 'bg-slate-50/50 sm:bg-surface')}
                 />
               </div>
               <button
@@ -190,7 +190,7 @@ export function AddVocabularyPage() {
         </div>
       </div>
 
-      <div className="sticky bottom-[calc(76px+env(safe-area-inset-bottom))] z-10 mt-6 flex items-center justify-between gap-4 rounded-2xl border border-line bg-white/90 p-3 pl-5 shadow-lift backdrop-blur lg:bottom-6">
+      <div className="sticky bottom-[calc(76px+env(safe-area-inset-bottom))] z-10 mt-6 flex items-center justify-between gap-4 rounded-2xl border border-line bg-surface/90 p-3 pl-5 shadow-lift backdrop-blur lg:bottom-6">
         <span className="tabular text-sm text-muted" aria-live="polite">
           {complete.length} {complete.length === 1 ? 'word' : 'words'} ready
           {partial.length > 0 && <span className="text-slate-400"> · {partial.length} incomplete</span>}

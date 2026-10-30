@@ -69,7 +69,7 @@ export function SegmentedControl<T extends string>({
           SIZES[size].radius,
           tone === 'solid'
             ? 'bg-blue-600 shadow-[0_1px_2px_rgba(30,64,175,0.35),0_2px_6px_-1px_rgba(37,99,235,0.35)]'
-            : 'bg-white shadow-[0_1px_2px_rgba(15,23,42,0.08),0_1px_3px_rgba(15,23,42,0.06)] ring-1 ring-slate-200/60',
+            : 'bg-surface shadow-[0_1px_2px_rgba(15,23,42,0.08),0_1px_3px_rgba(15,23,42,0.06)] ring-1 ring-slate-200/60 dark:bg-slate-300 dark:ring-0',
         )}
         style={{
           top: 'var(--seg-pad)',

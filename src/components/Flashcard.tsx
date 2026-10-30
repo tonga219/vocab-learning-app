@@ -32,7 +32,7 @@ function CardFace({ face, side, hint }: { face: Face; side: 'front' | 'back'; hi
     <div
       className={cn(
         'flip-face flex flex-col overflow-hidden rounded-[22px] border border-slate-200/90',
-        side === 'front' ? 'bg-white' : 'back bg-[#FCFDFF]',
+        side === 'front' ? 'bg-surface' : 'back bg-card-back',
         'shadow-card',
       )}
     >
@@ -54,7 +54,7 @@ function CardFace({ face, side, hint }: { face: Face; side: 'front' | 'back'; hi
           aria-hidden
           className="pointer-events-none absolute inset-x-6 bottom-14 top-[96px] sm:inset-x-8"
           style={{
-            backgroundImage: 'repeating-linear-gradient(to bottom, transparent 0, transparent 39px, rgba(219,234,254,0.7) 39px, rgba(219,234,254,0.7) 40px)',
+            backgroundImage: 'repeating-linear-gradient(to bottom, transparent 0, transparent 39px, rgb(var(--blue-100) / 0.7) 39px, rgb(var(--blue-100) / 0.7) 40px)',
             maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
             WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
           }}
@@ -108,8 +108,8 @@ export function Flashcard({ front, back, flipped, onFlip, instant, enterFrom }: 
       )}
     >
       {/* Deck depth: stationary cards peeking out beneath */}
-      <div aria-hidden className="absolute inset-x-6 -bottom-3 top-6 rounded-[22px] border border-slate-200/70 bg-white/70 shadow-soft" />
-      <div aria-hidden className="absolute inset-x-3 -bottom-1.5 top-3 rounded-[22px] border border-slate-200/80 bg-white/90 shadow-soft" />
+      <div aria-hidden className="absolute inset-x-6 -bottom-3 top-6 rounded-[22px] border border-slate-200/70 bg-surface/70 shadow-soft" />
+      <div aria-hidden className="absolute inset-x-3 -bottom-1.5 top-3 rounded-[22px] border border-slate-200/80 bg-surface/90 shadow-soft" />
 
       <button
         type="button"
